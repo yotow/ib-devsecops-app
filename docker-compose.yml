@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  app:
+    build:
+      context: app
+    image: devsecops-app
+    ports:
+      - 9999:9999
+    environment:
+      - DATABASE_URL=postgres://app:pass@db:5432/db
+    depends_on:
+      - db
+  db:
+    image: postgres:12.3-alpine
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=db
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
